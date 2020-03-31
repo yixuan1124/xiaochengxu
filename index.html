@@ -106,8 +106,12 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
+            margin:20px 0;
+            border-bottom:1px solid;
         }
-
+        .content-list>h1{
+            width:100%;
+        }
         .content-item {
             width: 18%;
             height: 200px;
@@ -172,6 +176,7 @@
             <img class="logo" src="./1.jpg" alt="">
         </div>
         <ul id="nav-list">
+            <li class="index">首页</li>
         </ul>
     </nav>
     <header>
@@ -199,10 +204,12 @@
     </footer>
     <script type="text/javascript">
         _.jsonp("https://api.jisuapi.com/news/channel", {
-            appkey: "f085e56441f42f2a"
+            appkey: "fb7693c56d161154"
         }, "news", function (date, error) {
+            var arr = [];
             $.each(date.result, function (idx, item) {
                 $("#nav-list").append("<li class='list-li'>" + item + "</li>");
+                arr.push(item);
                 $(".list-li").eq(idx).click(function(){
                      $("#main").empty().append("<section class='title'>"+
                         "<div class='title-item'>"+
@@ -210,7 +217,7 @@
                         "</div>"+
                         "<div class='more'>"+
                             "<img src=''>"+
-                            "<span></span>"+
+                            "<span>更多</span>"+
                         "</div>"+
                     "</section>"+
                     "<section>"+
@@ -220,7 +227,7 @@
                     
 
                             _.jsonp("https://api.jisuapi.com/news/get",{
-                                appkey: "f085e56441f42f2a",
+                                appkey: "fb7693c56d161154",
                                 channel: $(this).text(),
                                 num:"40"
                             },"news1",function(date,error){
@@ -238,6 +245,57 @@
                             });
                         });
             });
+            $(".index").click(function(){
+                $("#main").empty();
+                $.each(arr,function(ix,it){
+                   _.jsonp("https://api.jisuapi.com/news/get",{
+                       appkey:"fb7693c56d161154",
+                       channel:it,
+                       num:10
+                   },"newsidx",function(date,error){
+                    var ul = $("<ul class='content-list'>"+
+                        "</ul>");
+                    var h1 = $("<h1></h1>");
+                    h1.text(date.result.channel).appendTo(ul);    
+                        var date = date.result.list;
+                        $.each(date,function(i,t){
+                            $("<li class='content-item'>"+
+                                    "<img src="+t.pic+">"+
+                                    "<a class='item-a' href="+t.weburl+">"+
+                                        "<h4>"+t.title+"</h4>"+
+                                        "<span>"+t.time+"</span>"+
+                                        "<span>"+t.src+"</span>"+
+                                    "</a>"+
+                                "</li>").appendTo(ul);
+                        })
+                        $("#main").append(ul);
+                   });
+                });
+            })
+            $.each(arr,function(ix,it){
+                   _.jsonp("https://api.jisuapi.com/news/get",{
+                       appkey:"fb7693c56d161154",
+                       channel:it,
+                       num:10
+                   },"newsidx",function(date,error){
+                    var ul = $("<ul class='content-list'>"+
+                        "</ul>");
+                    var h1 = $("<h1></h1>");
+                    h1.text(date.result.channel).appendTo(ul);    
+                        var date = date.result.list;
+                        $.each(date,function(i,t){
+                            $("<li class='content-item'>"+
+                                    "<img src="+t.pic+">"+
+                                    "<a class='item-a' href="+t.weburl+">"+
+                                        "<h4>"+t.title+"</h4>"+
+                                        "<span>"+t.time+"</span>"+
+                                        "<span>"+t.src+"</span>"+
+                                    "</a>"+
+                                "</li>").appendTo(ul);
+                        })
+                        $("#main").append(ul);
+                   });
+                });
         }
         );
         $("#submit").click(function(e){
@@ -258,10 +316,9 @@
                     "</section>");
             
             _.jsonp("https://api.jisuapi.com/news/search",{
-                appkey:"f085e56441f42f2a",
+                appkey:"fb7693c56d161154",
                 keyword:res.keyword
             },"search",function(date,error){
-                console.log(date);
                  $.each(date.result.list,function(i,t){
                     $(".content-list").append("<li class='content-item'>"+
                     "<img src="+t.pic+">"+
@@ -274,38 +331,38 @@
                 });
             });
         });
-        newschannel("头条",40);
-        function newschannel(name,nums){
-            _.jsonp("https://api.jisuapi.com/news/get",{
-                appkey: "f085e56441f42f2a",
-                channel: name,
-                num:nums
-            },"news1",function(date,error){
-                $("#main").empty().append("<section class='title'>"+
-                        "<div class='title-item'>"+
-                            "<h1>"+date.result.channel+"</h1>"+
-                        "</div>"+
-                        "<div class='more'>"+
-                            "<img src=''>"+
-                            "<span></span>"+
-                        "</div>"+
-                    "</section>"+
-                    "<section>"+
-                        "<ul class='content-list'>"+
-                        "</ul>"+
-                    "</section>");
-                $.each(date.result.list,function(i,t){
-                    $(".content-list").append("<li class='content-item'>"+
-                    "<img src="+t.pic+">"+
-                    "<a class='item-a' href="+t.weburl+">"+
-                        "<h4>"+t.title+"</h4>"+
-                        "<span>"+t.time+"</span>"+
-                        "<span>"+t.src+"</span>"+
-                    "</a>"+
-                "</li>");
-                });
-            });
-        }
+        // // newschannel("头条",40);
+        // function newschannel(name,nums){
+        //     _.jsonp("https://api.jisuapi.com/news/get",{
+        //         appkey: "f085e56441f42f2a",
+        //         channel: name,
+        //         num:nums
+        //     },"news1",function(date,error){
+        //         $("#main").append("<section class='title'>"+
+        //                 "<div class='title-item'>"+
+        //                     "<h1>"+date.result.channel+"</h1>"+
+        //                 "</div>"+
+        //                 "<div class='more'>"+
+        //                     "<img src=''>"+
+        //                     "<span></span>"+
+        //                 "</div>"+
+        //             "</section>"+
+        //             "<section>"+
+        //                 "<ul class='content-list'>"+
+        //                 "</ul>"+
+        //             "</section>");
+        //         $.each(date.result.list,function(i,t){
+        //             $(".content-list").append("<li class='content-item'>"+
+        //             "<img src="+t.pic+">"+
+        //             "<a class='item-a' href="+t.weburl+">"+
+        //                 "<h4>"+t.title+"</h4>"+
+        //                 "<span>"+t.time+"</span>"+
+        //                 "<span>"+t.src+"</span>"+
+        //             "</a>"+
+        //         "</li>");
+        //         });
+        //     });
+        // }
          
     </script>
 </body>
