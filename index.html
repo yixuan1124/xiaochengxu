@@ -203,13 +203,18 @@
         </ul>
     </footer>
     <script type="text/javascript">
+    //获取新闻分类
         _.jsonp("https://api.jisuapi.com/news/channel", {
             appkey: "fb7693c56d161154"
         }, "news", function (date, error) {
             var arr = [];
+            //遍历获取的数据
             $.each(date.result, function (idx, item) {
+                //导航栏
                 $("#nav-list").append("<li class='list-li'>" + item + "</li>");
+                //把数据添加到数组
                 arr.push(item);
+                //导航栏点击事件
                 $(".list-li").eq(idx).click(function(){
                      $("#main").empty().append("<section class='title'>"+
                         "<div class='title-item'>"+
@@ -225,7 +230,7 @@
                         "</ul>"+
                     "</section>");
                     
-
+                            //点击对应的导航栏获取对应的channel
                             _.jsonp("https://api.jisuapi.com/news/get",{
                                 appkey: "fb7693c56d161154",
                                 channel: $(this).text(),
@@ -245,6 +250,7 @@
                             });
                         });
             });
+            //点击首页
             $(".index").click(function(){
                 $("#main").empty();
                 $.each(arr,function(ix,it){
@@ -272,6 +278,7 @@
                    });
                 });
             })
+            //首页设置为默认
             $.each(arr,function(ix,it){
                    _.jsonp("https://api.jisuapi.com/news/get",{
                        appkey:"fb7693c56d161154",
@@ -298,6 +305,7 @@
                 });
         }
         );
+        //搜索关键字
         $("#submit").click(function(e){
             e.preventDefault();
             var res = _.formSerializeToJson($("#form")[0]);
