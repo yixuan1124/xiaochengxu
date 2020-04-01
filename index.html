@@ -205,7 +205,7 @@
     <script type="text/javascript">
     //获取新闻分类
         _.jsonp("https://api.jisuapi.com/news/channel", {
-            appkey: "fb7693c56d161154"
+            appkey: " b97a508867d0c4c2"
         }, "news", function (date, error) {
             var arr = [];
             //遍历获取的数据
@@ -232,7 +232,7 @@
                     
                             //点击对应的导航栏获取对应的channel
                             _.jsonp("https://api.jisuapi.com/news/get",{
-                                appkey: "fb7693c56d161154",
+                                appkey: " b97a508867d0c4c2",
                                 channel: $(this).text(),
                                 num:"40"
                             },"news1",function(date,error){
@@ -255,7 +255,7 @@
                 $("#main").empty();
                 $.each(arr,function(ix,it){
                    _.jsonp("https://api.jisuapi.com/news/get",{
-                       appkey:"fb7693c56d161154",
+                       appkey:" b97a508867d0c4c2",
                        channel:it,
                        num:10
                    },"newsidx",function(date,error){
@@ -281,7 +281,7 @@
             //首页设置为默认
             $.each(arr,function(ix,it){
                    _.jsonp("https://api.jisuapi.com/news/get",{
-                       appkey:"fb7693c56d161154",
+                       appkey:" b97a508867d0c4c2",
                        channel:it,
                        num:10
                    },"newsidx",function(date,error){
@@ -324,7 +324,7 @@
                     "</section>");
             
             _.jsonp("https://api.jisuapi.com/news/search",{
-                appkey:"fb7693c56d161154",
+                appkey:" b97a508867d0c4c2",
                 keyword:res.keyword
             },"search",function(date,error){
                  $.each(date.result.list,function(i,t){
@@ -337,8 +337,18 @@
                     "</a>"+
                 "</li>");
                 });
+                var n = date.result.list.length % 5;
+                var t = ".content-list";
+                var c = "<li class='content-item'></li>";
+                appendEl(n,t,c);
             });
         });
+        //把最后一行的li补全
+       function appendEl(n, t, c) {
+            for (var i = 0; i < n; i++) {
+                $(t).append(c);
+            }
+};
         // // newschannel("头条",40);
         // function newschannel(name,nums){
         //     _.jsonp("https://api.jisuapi.com/news/get",{
